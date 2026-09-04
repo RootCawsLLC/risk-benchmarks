@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Risk Benchmarks: sourced starting points for cyber loss estimates</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
+            color-scheme: light;
             --accent: #8d5860;
             --accent-2: #c7848d;
             --accent-soft: #f4dcdf;
@@ -17,296 +21,134 @@
             --muted: #7a7073;
             --line: #d8c9cc;
             --soft-line: rgba(58, 51, 54, .08);
+            --amber: #9a6a24;
+            --amber-soft: #f7e9d4;
+            --ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --display: 'Fraunces', Georgia, serif;
+            --shadow: 0 10px 26px rgba(58, 51, 54, .07);
+            --radius: 14px;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-family: var(--ui);
             background: var(--paper);
             color: var(--ink);
-            line-height: 1.6;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            min-width: 320px;
         }
+        a { color: var(--accent); }
+        button, select { font: inherit; color: inherit; }
+        :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 
         /* Width and gutter match the other risk-lab tools so the portfolio page
            can align its tab strip and copy to the same edge. */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 40px 24px;
-        }
+        .wrap { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+        @media (max-width: 767px) { .wrap { padding: 0 16px; } }
 
-        @media (max-width: 767px) {
-            .container { padding: 32px 16px; }
-        }
+        .masthead { padding-top: 48px; padding-bottom: 28px; border-bottom: 1px solid var(--soft-line); }
+        body.embedded .masthead { display: none; }
+        .kicker { font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+        .masthead h1 { font-family: var(--display); font-weight: 600; font-size: clamp(34px, 4.6vw, 56px); line-height: 1.02; letter-spacing: -.02em; margin: 10px 0 14px; }
+        .masthead h1 em { font-style: italic; color: var(--accent); }
+        .deck { font-size: 17px; color: var(--ink-2); line-height: 1.6; margin-bottom: 12px; }
+        .deck:last-child { margin-bottom: 0; }
 
-        .section {
-            background: var(--panel);
-            border-radius: 8px;
-            padding: 30px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            border: 1px solid var(--soft-line);
-            margin-bottom: 30px;
-        }
+        .card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); }
+        .panel { padding: 16px 18px 18px; margin-bottom: 16px; }
+        .panel-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+        .panel-head h2 { font-family: var(--display); font-weight: 600; font-size: 20px; letter-spacing: -.01em; }
+        .lede { font-size: 13.5px; color: var(--ink-2); line-height: 1.55; margin-bottom: 12px; }
 
-        h1 {
-            font-size: 1.6rem;
-            color: var(--accent);
-            margin-bottom: 12px;
-        }
+        /* the stat strip */
+        .strip { padding-top: 24px; padding-bottom: 0; }
+        .stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 16px; }
+        @media (max-width: 767px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+        .stat { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 12px 14px; }
+        .stat-value { font-family: var(--display); font-weight: 600; font-size: 22px; line-height: 1.1; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+        .stat-label { font-size: 11px; color: var(--muted); margin-top: 4px; line-height: 1.35; }
 
-        h2 {
-            font-size: 1.3rem;
-            color: var(--accent);
-            margin-bottom: 16px;
-        }
+        /* filters */
+        .controls { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
+        .control label { display: block; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+        .control select { padding: 8px 10px; border: 1px solid var(--line); border-radius: 9px; font-size: 13.5px; background: var(--paper); color: var(--ink); min-width: 210px; }
+        .control select:focus { border-color: var(--accent); outline: none; }
 
-        .lede {
-            font-size: 1rem;
-            color: var(--ink-2);
-            max-width: 70ch;
-            margin-bottom: 8px;
-        }
+        /* shard cards. align-items: start so a card whose sources are expanded
+           doesn't stretch its neighbour into a column of dead space. */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); align-items: start; gap: 14px; }
+        @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+        .card-shard { background: var(--paper); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; }
+        .card-title { font-family: var(--display); font-weight: 600; font-size: 18px; letter-spacing: -.01em; color: var(--ink); }
+        .card-meta { font-size: 12.5px; color: var(--muted); margin: 2px 0 12px; }
+        .status { display: inline-block; font-size: 10.5px; font-weight: 600; letter-spacing: .04em; color: var(--ink-2); background: var(--panel); border: 1px solid var(--line); border-radius: 999px; padding: 3px 8px; margin-top: 6px; margin-right: 4px; }
+        .status.tier-evidence_backed { color: var(--amber); background: var(--amber-soft); border-color: transparent; }
+        .status.tier-module_governed { color: var(--ink-2); }
+        .status.conf { color: var(--muted); }
 
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 16px;
-            margin-top: 24px;
-        }
+        .triangle { display: grid; grid-template-columns: 84px repeat(3, 1fr); gap: 6px; align-items: center; font-size: 13px; margin-bottom: 6px; }
+        .triangle-label { font-size: 10.5px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+        .triangle-cell { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 6px; text-align: center; font-variant-numeric: tabular-nums; }
+        .triangle-head { font-size: 10px; color: var(--muted); text-align: center; text-transform: uppercase; letter-spacing: .06em; }
 
-        .stat {
-            background: var(--paper);
-            border: 1px solid var(--soft-line);
-            border-radius: 6px;
-            padding: 16px;
-            text-align: center;
-        }
+        .warning { background: var(--amber-soft); border-left: 3px solid var(--amber); padding: 8px 10px; border-radius: 8px; font-size: 12.5px; line-height: 1.55; color: var(--ink-2); margin: 12px 0 10px; }
+        .warning strong { color: var(--amber); }
 
-        .stat-value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            font-family: 'Georgia', serif;
-            color: var(--ink);
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .controls {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .control label {
-            display: block;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-        }
-
-        .control select {
-            padding: 8px;
-            border: 1px solid var(--line);
-            border-radius: 4px;
-            font-size: 0.9rem;
-            background: #ffffff;
-            color: var(--ink);
-            min-width: 190px;
-        }
-
-        /* align-items: start so a card whose sources are expanded doesn't
-           stretch its neighbour into a column of dead space. */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
-            align-items: start;
-            gap: 20px;
-        }
-
-        @media (max-width: 640px) {
-            .grid { grid-template-columns: 1fr; }
-            .section { padding: 16px; }
-        }
-
-        .card {
-            background: var(--paper);
-            border: 1px solid var(--soft-line);
-            border-radius: 6px;
-            padding: 20px;
-        }
-
-        .card-title {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--ink);
-        }
-
-        .card-meta {
-            font-size: 0.8rem;
-            color: var(--muted);
-            margin-bottom: 14px;
-        }
-
-        .status {
-            display: inline-block;
-            font-size: 0.65rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
-            color: var(--accent);
-            background: var(--accent-soft);
-            border-radius: 3px;
-            padding: 2px 6px;
-            margin-top: 6px;
-            margin-right: 4px;
-        }
-
-        /* The weaker tier is marked, not hidden: same evidence bar, but no
-           calibration record and no practitioner review behind it. */
-        .status.tier-evidence_backed {
-            color: #7a5a12;
-            background: #f7e9d4;
-        }
-
-        .status.tier-module_governed {
-            color: var(--muted);
-            background: var(--paper-2);
-        }
-
-        .status.conf {
-            color: var(--muted);
-            background: var(--paper-2);
-        }
-
-        .triangle {
-            display: grid;
-            grid-template-columns: 90px repeat(3, 1fr);
-            gap: 6px;
-            align-items: center;
-            font-size: 0.85rem;
-            margin-bottom: 6px;
-        }
-
-        .triangle-label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: var(--muted);
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
-        }
-
-        .triangle-cell {
-            background: var(--panel);
-            border: 1px solid var(--line);
-            border-radius: 4px;
-            padding: 6px;
-            text-align: center;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .triangle-head {
-            font-size: 0.65rem;
-            color: var(--muted);
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
-        }
-
-        .warning {
-            background: var(--accent-soft);
-            border-left: 3px solid var(--accent);
-            padding: 10px 12px;
-            border-radius: 4px;
-            font-size: 0.82rem;
-            margin: 14px 0 10px;
-            line-height: 1.5;
-        }
-
-        details summary {
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85rem;
-            color: var(--ink-2);
-        }
-
-        details ul { margin: 10px 0 0 18px; }
-
-        details li {
-            font-size: 0.8rem;
-            color: var(--muted);
-            margin-bottom: 10px;
-            line-height: 1.5;
-        }
-
-        code {
-            font-size: 0.75rem;
-            color: var(--ink-2);
-        }
-
+        details summary { cursor: pointer; font-weight: 600; font-size: 12.5px; color: var(--ink-2); }
+        details ul { margin: 8px 0 0 16px; }
+        details li { font-size: 12px; color: var(--muted); margin-bottom: 8px; line-height: 1.5; }
+        code { font-family: var(--ui); font-size: 11px; background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; color: var(--ink-2); }
         .confidence { font-style: italic; }
+        .limit { font-size: 12px; margin-top: 2px; }
 
-        .limit {
-            font-size: 0.75rem;
-            margin-top: 2px;
-        }
+        /* notes at the foot */
+        .notes { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; padding-top: 20px; padding-bottom: 8px; }
+        .notes::before { content: "Using these honestly"; grid-column: 1 / -1; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-bottom: 10px; border-bottom: 1px solid var(--soft-line); }
+        @media (max-width: 1099px) { .notes { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 640px) { .notes { grid-template-columns: 1fr; } }
+        .note { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px 20px; }
+        .note h3 { font-family: var(--display); font-weight: 600; font-size: 19px; margin-bottom: 8px; letter-spacing: -.01em; }
+        .note p { font-size: 14px; color: var(--ink-2); line-height: 1.65; }
 
-        a { color: var(--accent); }
+        footer { margin-top: 28px; padding: 20px 0 64px; border-top: 1px solid var(--line); font-size: 12px; line-height: 1.65; color: var(--muted); }
 
-        .takeaway {
-            background: var(--accent-soft);
-            border: 1px solid var(--accent-2);
-            border-left: 4px solid var(--accent);
-        }
-
-        .takeaway h2 { margin-bottom: 12px; }
-
-        .takeaway li { margin: 0 0 10px 20px; }
-
-        footer {
-            font-size: 0.85rem;
-            color: var(--muted);
-            text-align: center;
-            padding-bottom: 20px;
-        }
-
-        .error {
-            border: 2px dashed var(--line);
-            border-radius: 6px;
-            padding: 30px;
-            text-align: center;
-            color: var(--muted);
-        }
+        .error { border: 2px dashed var(--line); border-radius: 10px; padding: 24px; text-align: center; color: var(--muted); font-size: 13px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="section">
-            <h1>Risk Benchmarks</h1>
-            <p class="lede">
-                Starting ranges for cyber loss estimates, where every number states where it came
-                from and what it will not support. Each shard gives an annual event frequency and a
-                per-event loss, as three-point estimates you can drop straight into a Monte Carlo.
-            </p>
-            <p class="lede">
-                The point is not that these numbers are right. It is that a range carrying six
-                citations and a range someone typed from memory should not look equally
-                authoritative &mdash; so here the sources travel with the numbers.
-            </p>
-            <div class="stats" id="stats"></div>
-        </div>
+    <script>
+        // The portfolio risk lab renders this page in an iframe and carries the
+        // introduction in its own header, so the masthead is hidden when embedded.
+        try { if (window.self !== window.top) document.body.classList.add('embedded'); } catch (e) { document.body.classList.add('embedded'); }
+    </script>
 
-        <div class="section">
-            <h2>The shards</h2>
+    <header class="wrap masthead">
+        <div class="kicker">RootCaws · Risk lab</div>
+        <h1>Risk <em>Benchmarks</em></h1>
+        <p class="deck">
+            Starting ranges for cyber loss estimates, where every number states where it came
+            from and what it will not support. Each shard gives an annual event frequency and a
+            per-event loss, as three-point estimates you can drop straight into a Monte Carlo.
+        </p>
+        <p class="deck">
+            The point is not that these numbers are right. It is that a range carrying six
+            citations and a range someone typed from memory should not look equally
+            authoritative &mdash; so here the sources travel with the numbers.
+        </p>
+    </header>
+
+    <div class="wrap strip">
+        <div class="stats" id="stats"></div>
+    </div>
+
+    <div class="wrap">
+        <section class="card panel" aria-label="The shards">
+            <div class="panel-head">
+                <h2>The shards</h2>
+            </div>
+            <p class="lede">Filter to the population nearest the thing you are modelling, then open a shard's sources before quoting any of its numbers.</p>
             <div class="controls">
                 <div class="control">
                     <label for="country">Country</label>
@@ -320,25 +162,26 @@
             <div class="grid" id="grid">
                 <div class="error">Loading&hellip;</div>
             </div>
-        </div>
+        </section>
 
-        <div class="section takeaway">
-            <h2>Using these honestly</h2>
-            <ul>
-                <li><strong>These are starters, not benchmarks.</strong> Read each shard's status.
-                    Most are governed starters, meaning the evidence is real but the shard has not
-                    cleared human benchmark review.</li>
-                <li><strong>Some frequencies are borrowed from another country.</strong> Where no
-                    local per-firm rate is published, a shard may bridge from one that is &mdash; the
-                    US data-breach frequency comes from a UK survey. Each such parameter says so in
-                    its own limitation.</li>
-                <li><strong>Currencies differ and there is no FX table here.</strong> Four
-                    currencies across eleven shards. Do not add them together without converting
-                    first, and state the rate and date when you do.</li>
-                <li><strong>Carry the caveats forward.</strong> If a number from here reaches a board
-                    deck, its limitation belongs on the same slide.</li>
-            </ul>
-        </div>
+        <section class="notes" aria-label="Using these honestly">
+            <div class="note">
+                <h3>Starters, not benchmarks</h3>
+                <p>Read each shard's status. Most are governed starters, meaning the evidence is real but the shard has not cleared human benchmark review.</p>
+            </div>
+            <div class="note">
+                <h3>Some frequencies are borrowed</h3>
+                <p>Where no local per-firm rate is published, a shard may bridge from another country that has one &mdash; the US data-breach frequency comes from a UK survey. Each such parameter says so in its own limitation.</p>
+            </div>
+            <div class="note">
+                <h3>Currencies differ, and there is no FX table</h3>
+                <p>Four currencies across the shards. Do not add them together without converting first, and state the rate and date when you do.</p>
+            </div>
+            <div class="note">
+                <h3>Carry the caveats forward</h3>
+                <p>If a number from here reaches a board deck, its limitation belongs on the same slide.</p>
+            </div>
+        </section>
 
         <footer id="footer"></footer>
     </div>
@@ -390,7 +233,7 @@
                 </li>`).join('');
 
             return `
-                <div class="card">
+                <div class="card-shard">
                     <div class="card-title">${esc(b.title)}</div>
                     <div class="card-meta">
                         ${esc(b.scope)} &middot; ${esc(b.currency)}

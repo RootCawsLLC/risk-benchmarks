@@ -23,6 +23,7 @@
             --soft-line: rgba(58, 51, 54, .08);
             --amber: #9a6a24;
             --amber-soft: #f7e9d4;
+            --sage: #4c7359;
             --ui: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             --display: 'Fraunces', Georgia, serif;
             --shadow: 0 10px 26px rgba(58, 51, 54, .07);
@@ -50,6 +51,7 @@
 
         .masthead { padding-top: 48px; padding-bottom: 28px; border-bottom: 1px solid var(--soft-line); }
         body.embedded .masthead { display: none; }
+        body.embedded .guide { display: none; }
         .kicker { font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
         .masthead h1 { font-family: var(--display); font-weight: 600; font-size: clamp(34px, 4.6vw, 56px); line-height: 1.02; letter-spacing: -.02em; margin: 10px 0 14px; }
         .masthead h1 em { font-style: italic; color: var(--accent); }
@@ -112,6 +114,22 @@
         .note h3 { font-family: var(--display); font-weight: 600; font-size: 19px; margin-bottom: 8px; letter-spacing: -.01em; }
         .note p { font-size: 14px; color: var(--ink-2); line-height: 1.65; }
 
+        .guide { padding: 28px 0 8px; }
+        .guide h2 { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 28px 0 12px; padding-bottom: 10px; border-bottom: 1px solid var(--soft-line); }
+        .guide h2:first-of-type { margin-top: 0; }
+        .guide-toc { display: flex; flex-wrap: wrap; gap: .35rem .9rem; margin: 0 0 18px; font-size: 13px; }
+        .guide-toc a { color: var(--accent); }
+        .guide-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        @media (max-width: 699px) { .guide-pair { grid-template-columns: 1fr; } }
+        .guide-box { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 18px; }
+        .guide-box.use { border-left: 3px solid var(--sage); }
+        .guide-box.dont { border-left: 3px solid var(--accent); }
+        .guide-box h3 { font-family: var(--display); font-weight: 600; font-size: 18px; margin: 0 0 8px; letter-spacing: -.01em; }
+        .guide-box ul, .guide ol { margin: 0; padding-left: 1.15rem; }
+        .guide li { font-size: 14px; color: var(--ink-2); line-height: 1.65; margin: .4rem 0; }
+        .guide li b { color: var(--ink); font-weight: 600; }
+        .guide-close { font-size: 14px; color: var(--ink-2); line-height: 1.65; margin: 10px 0 0; }
+
         footer { margin-top: 28px; padding: 20px 0 64px; border-top: 1px solid var(--line); font-size: 12px; line-height: 1.65; color: var(--muted); }
 
         .error { border: 2px dashed var(--line); border-radius: 10px; padding: 24px; text-align: center; color: var(--muted); font-size: 13px; }
@@ -138,6 +156,47 @@
             authoritative &mdash; so here the sources travel with the numbers.
         </p>
     </header>
+
+    <section class="wrap guide" aria-label="How to use this">
+        <nav class="guide-toc" aria-label="On this page">
+            <a href="#when">When to use it</a>
+            <a href="#how">How to use it</a>
+            <a href="#org">Take it into your org</a>
+        </nav>
+        <h2 id="when">When and where to use it</h2>
+        <div class="guide-pair">
+            <div class="guide-box use">
+                <h3>Use it when</h3>
+                <ul>
+                    <li>You need a starting frequency and loss range and refuse to type one from memory.</li>
+                    <li>You are reviewing someone else's quantification and want to see whether the inputs cite anything.</li>
+                    <li>You are about to load a shard into another lab tool, or teaching why “industry average” is not a number.</li>
+                </ul>
+            </div>
+            <div class="guide-box dont">
+                <h3>Do not use it when</h3>
+                <ul>
+                    <li>You are about to call these benchmarks. Most are governed starters. Nothing in the corpus is high confidence.</li>
+                    <li>You need a portfolio total across shards. Four currencies, no FX table — do not add them.</li>
+                    <li>A bridged frequency is going into a board deck without the country it came from and the limitation that says so.</li>
+                </ul>
+            </div>
+        </div>
+        <h2 id="how">How to use it</h2>
+        <ol>
+            <li><b>Filter.</b> Twelve shards across countries and threat types. Narrow to the population nearest the thing you are modelling.</li>
+            <li><b>Read the badges.</b> Every shard carries a maturity status, a provenance tier, and how many of its parameters sit at each confidence level. Most are governed starters rather than reviewed benchmarks.</li>
+            <li><b>Open the sources.</b> Expand a shard and each of its six parameters names the study, the publication date, the confidence, and the limitation on its use — including which frequencies are bridged from another country because no local rate is published.</li>
+        </ol>
+        <h2 id="org">Take it into your organisation</h2>
+        <ol>
+            <li><b>Build your own shard file:</b> population, threat, six parameters, a named source, a date, a confidence, a limitation. A parameter without those fields is not allowed into a model that will be shown.</li>
+            <li><b>When you borrow a rate from another country,</b> the limitation sits on the same slide as the number.</li>
+            <li><b>Revisit shards when the source is republished.</b> A 2019 survey is a 2019 survey.</li>
+            <li><b>Take the discipline, not the figures.</b> Every input traces to a publication or to a named estimator. None of these figures are yours until you have read the limitation and decided it still applies.</li>
+        </ol>
+        <p class="guide-close">The notes below are the honest limits. If a number from here reaches a board deck, its limitation belongs on the same slide.</p>
+    </section>
 
     <div class="wrap strip">
         <div class="stats" id="stats"></div>

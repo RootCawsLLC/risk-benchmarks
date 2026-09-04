@@ -318,6 +318,19 @@
                      (${esc(err.message)}).<br>Opening this file directly from disk will not work;
                      serve the folder over HTTP instead.</div>`;
             });
+
+        // Embedded in the portfolio risk lab, which is on another origin and cannot
+        // measure this document. Report the page height so the frame can fit it.
+        if (document.body.classList.contains('embedded')) {
+            let lastHeight = 0;
+            const reportHeight = () => {
+                const h = Math.ceil(document.documentElement.getBoundingClientRect().height);
+                if (h > 0 && h !== lastHeight) { lastHeight = h; window.parent.postMessage({ type: 'risk-lab:height', height: h }, '*'); }
+            };
+            if (typeof ResizeObserver !== 'undefined') new ResizeObserver(reportHeight).observe(document.body);
+            window.addEventListener('load', reportHeight);
+            setTimeout(reportHeight, 0);
+        }
     </script>
 </body>
 </html>

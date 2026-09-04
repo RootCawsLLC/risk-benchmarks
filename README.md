@@ -4,7 +4,7 @@ Source-backed starting ranges for cyber loss estimates, as one JSON file that br
 load directly. Every number carries the source it came from, that source's stated limitation, and
 what the shard will not support.
 
-**Live:** https://rootcawsllc.github.io/risk-benchmarks/
+**Live:** https://rootcawsllc.github.io/risk-benchmarks/ — when to use it, how to use it, and how to take the pattern into an organisation.
 
 ![The Risk Benchmarks explorer. A header reports 12 shards, 8 countries, 72 parameters, 41 distinct sources and 4 currencies. Below, filters for country and threat sit above a grid of shard cards; each shows a frequency and loss three-point estimate in its own currency, badges for its maturity status, provenance tier and confidence mix, and a "not good for" caveat. The first card is expanded to show all six parameters, each naming its source, publication date, confidence level and the limitation on its use](preview.png)
 
